@@ -8,6 +8,7 @@ from pathlib import Path
 # Deletes the Previous pdfs to avoid storage issues
 def clean_files(path='pdfs'):
     folder = Path(path)
+    folder.mkdir(exist_ok=True)
     for file in folder.iterdir():
         if file.is_file():
             file.unlink()
