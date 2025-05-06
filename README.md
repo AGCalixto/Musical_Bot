@@ -17,6 +17,7 @@ A Telegram bot that fetches lyrics and chords for any song and generates a clean
 -- chromedriver.exe
 -- DejaVuSans.ttf
 - How to Use
+- Docker & Cloud Deployment
 - Future Updates
 - Author
 
@@ -60,6 +61,9 @@ Project/
 |- DejaVuSans.cw127.pkl
 |- DejaVuSans.pkl
 |- DejaVuSans.ttf
+|- requirements.txt
+|- Dockerfile
+|- .dockerignore
 
 ---
 
@@ -144,6 +148,31 @@ The main function of the bot is to obtain the lyrics and the chords of a song sp
 
 ---
 
+# Docker & Cloud Deployment
+
+🐳 Docker Usage
+
+1. Build the docker images:
+```bash
+docker build -t musical-bot .
+```
+2. Run the container:
+```bash
+docker run --env-file .env musical-bot
+```
+Note: Make sure your .dockerignore includes .env and that your .env file is present locally with necessary variables (like TELEGRAM_TOKEN, GENIUS_API_KEY).
+
+☁️ Railway Deployment
+
+1. Push your code to a GitHub repository (including your Dockerfile).
+2. Go to https://railway.app.
+3. Click *New Project -> Deploy from GitHub Repo*.
+4. Choose your repo (with the Dockerfile).
+5. Set environment variables in Railway's settings (e.g., TELEGRAM_TOKEN, GENIUS_API_KEY).
+6. Railway auto-builds and deploys using the Dockerfile. Done!
+
+---
+
 # Future Updates
 
 - Addition of more commands for handling the user's input.
@@ -152,7 +181,7 @@ The main function of the bot is to obtain the lyrics and the chords of a song sp
 - Utilization of Machine Learning to learn about the chords and produce their chords in case the original chords of a song are not available.
 - Implementation of Machine Learning for user song recommendation based on the previously requested songs.
 - Translating the Telegram Bot to the cloud to be permanently available to all users at any given time.
--- Potential platforms: AWS, Render, Heroku, or Railway.
+-- Current platform: *Railway (Docker-based Deployment)*.
 
 ---
 
