@@ -16,16 +16,27 @@ BOT_USERNAME = '@Kingdddbot'
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Yoooo! It\'s so dope to have you here. I am DeDeDe Bot. ;)'
                                     '\nType: \'/Song Name of a song \' and I\'ll return the lyrics and the tabs for '
-                                    'that song :D')
+                                    'that song :D\n\n'
+                                    'NOTE: I am currently managed by an online server, so the first chord retrieval '
+                                    'might take longer. Thanks for your patience 😘')
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('I am King DeDeDe but bot. Type \'/Song\' and the name of any song and i\'ll '
+    await update.message.reply_text('I am King DeDeDe but bot, and I am glad to have you here!. '
+                                    'Type \'/Song\' and the name of any song and i\'ll '
                                     'return the letter and the tabs!')
+    await update.message.reply_text('NOTE: I am currently managed by an online server, so the first chord retrieval '
+                                    'might take longer. Thanks for your patience 😘')
 
 
 async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('This needs to be edited')
+    await update.message.reply_text('Currently available commands:'
+                                    '\n/start - Initializes me 🤖.'
+                                    '\n/help - Gives you a debrief of my functions 🦾.'
+                                    '\n/Song {Name of the Song} - I will give you a song\'s tabs, lyrics and a kiss '
+                                    'if you want 🫦.')
+    await update.message.reply_text('NOTE: I am currently managed by an online server, so the first chord retrieval '
+                                    'might take longer. Thanks for your patience 😘')
 
 
 async def Song_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -39,6 +50,8 @@ async def Song_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.chat.send_action(action=ChatAction.TYPING)
     await update.message.reply_text(f'Searching the chords for \n🔥{song_text.capitalize()}🔥...')
     await update.message.reply_text(f'It may take a while... Please be patient...')
+    await update.message.reply_text('NOTE: I am currently managed by an online server, so the first chord retrieval '
+                                    'might take longer. Thanks for your patience 😘')
 
     try:
         chords, state = fetch_chords(search_chords_link(song_text), 0)
