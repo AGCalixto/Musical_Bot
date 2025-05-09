@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
-from selenium import webdriver
+from selenium import webdriver as uc
 from selenium.webdriver.chrome.options import Options
-import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -11,12 +10,14 @@ options = Options()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 
 temp_dir = tempfile.mkdtemp()
 options.add_argument(f'--user-data-dir={temp_dir}')
 
+
 def search_chords_link(song):
-    driver = webdriver.Chrome(options=options)
+    driver = uc.Chrome(options=options)
     href = []
     song = song.lower()
     if ' ' in song:
@@ -24,7 +25,7 @@ def search_chords_link(song):
 
     search_url = f'https://www.ultimate-guitar.com/search.php?search_type=title&value={song}'
     driver.get(search_url)
-    time.sleep(3)
+    WebDriverWait(driver, 5)
 
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
@@ -42,12 +43,12 @@ def fetch_chords(chords_link, iterations: int):
         return 'No chords found :(', state
 
     chords_link = chords_link[iterations] if chords_link else None
-    driver = webdriver.Chrome(options=options)
+    driver = uc.Chrome(options=options)
     driver.get(chords_link)
     state = False
 
     try:
-        chord_block = WebDriverWait(driver, 5).until(
+        chord_block = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, 'pre'))
         )
 

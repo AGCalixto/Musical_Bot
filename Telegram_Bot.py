@@ -48,7 +48,8 @@ async def Song_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if os.path.exists(file_path):
             await update.message.reply_text('Chords Found!!!')
             with open(file_path, 'rb') as pdf_file:
-                await update.message.reply_document(InputFile(pdf_file, filename=f'{safe_name}.pdf'))
+                await update.message.reply_document(InputFile(pdf_file, filename=f'{safe_name}.pdf'),
+                                                    caption='Thanks for waiting;\nHere are the chords you asked for🔥')
 
             keyboard = [[InlineKeyboardButton('✅ Yes', callback_data='yes'),
                          InlineKeyboardButton('❌ No', callback_data='no')]]
@@ -154,31 +155,32 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     # If data == 'no'
-    iteration = context.user_data['iteration_count', 1]
+    elif data == 'no':
+        iteration = context.user_data['iteration_count', 1]
 
-    try:
-        chords, state = fetch_chords(search_chords_link(song_text), iteration)
-        file_path = generate_song_pdf(song_text, chords)
-        safe_name = re.sub(r'[\\/*?:"<>|]', '', song_text.replace(' ', '_'))
+        try:
+            chords, state = fetch_chords(search_chords_link(song_text), iteration)
+            file_path = generate_song_pdf(song_text, chords)
+            safe_name = re.sub(r'[\\/*?:"<>|]', '', song_text.replace(' ', '_'))
 
-        if os.path.exists(file_path):
-            with open(file_path, 'rb') as pdf_file:
-                await query.message.reply_document(InputFile(pdf_file, filename=f'{safe_name}_alt{iteration}.pdf'))
+            if os.path.exists(file_path):
+                with open(file_path, 'rb') as pdf_file:
+                    await query.message.reply_document(InputFile(pdf_file, filename=f'{safe_name}_alt{iteration}.pdf'))
 
-            keyboard = [[InlineKeyboardButton('✅ Yes', callback_data='yes'),
-                         InlineKeyboardButton('❌ No', callback_data='no')]]
-            reply_markup = InlineKeyboardMarkup(keyboard)
+                keyboard = [[InlineKeyboardButton('✅ Yes', callback_data='yes'),
+                             InlineKeyboardButton('❌ No', callback_data='no')]]
+                reply_markup = InlineKeyboardMarkup(keyboard)
 
-            await query.message.reply_text('Do you like this version?', reply_markup=reply_markup)
-            context.user_data['iteration_count'] = iteration + 1
-        else:
-            await query.message.reply_text('No more versions found 😔')
-            context.user_data['iteration_count'] = 0  # Reset the iterations
+                await query.message.reply_text('Do you like this version?', reply_markup=reply_markup)
+                context.user_data['iteration_count'] = iteration + 1
+            else:
+                await query.message.reply_text('No more versions found 😔')
+                context.user_data['iteration_count'] = 0  # Reset the iterations
 
-    except Exception as e:
-        print(f'Error fetching alternative: {e}')
-        await query.message.reply_text('No more available versions or an error occured')
-        context.user_data['iteration_count'] = 0
+        except Exception as e:
+            print(f'Error fetching alternative: {e}')
+            await query.message.reply_text('No more available versions or an error occured')
+            context.user_data['iteration_count'] = 0
 
 
 if __name__ == '__main__':
